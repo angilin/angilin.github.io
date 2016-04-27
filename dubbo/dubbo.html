@@ -1,0 +1,142 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+		<meta name="viewport" content="width=1024" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<title>Dubbo技术分享</title>
+		<meta name="author" content="angilin.huang" />
+		<link href="css/impress.css" rel="stylesheet" />
+    </head>
+    <body class="impress-not-supported">
+
+		<div class="fallback-message">
+			<p>你的浏览器不支持impress.js，建议使用最新版本的Chrome，Sifari或Firefox浏览器</p>
+		</div>
+
+        <div id="impress">
+            <div class="step slide" data-x="0" data-y="0">
+                <div class="headline">Dubbo技术分享</div>
+            </div>
+            <div class="step slide" data-x="1300" data-y="0">
+                <div class="title">Dubbo是什么</div>
+				<div class="content">
+				<p>Dubbo是一个，<b>分布式服务框架</b>，致力于提供<b>高性能和透明化的RPC远程服务调用方案</b>，以及<b>SOA服务治理方案</b>。</p>
+				<p>其核心部分包含:</p>
+				<ul>
+				<li>远程通讯: 提供对多种基于长连接的NIO框架抽象封装，包括多种线程模型，序列化，以及“请求-响应”模式的信息交换方式。</li>
+				<li>集群容错: 提供基于接口方法的透明远程过程调用，包括多协议支持，以及软负载均衡，失败容错，地址路由，动态配置等集群支持。</li>
+				<li>自动发现: 基于注册中心目录服务，使服务消费方能动态的查找服务提供方，使地址透明，使服务提供方可以平滑增加或减少机器。<</li>
+				</ul>
+				</div>
+            </div>
+			<div class="step slide" data-x="2600" data-y="0">
+                <div class="title">Dubbo原理</div>
+				<div class="content">
+				<img src="images/dubbo-architecture.jpg"/>
+				<p><b>调用关系说明：</b></p>
+				<ul>
+					<li>0. 服务容器负责启动，加载，运行服务提供者。</li>
+					<li>1. 服务提供者在启动时，向注册中心注册自己提供的服务。</li>
+					<li>2. 服务消费者在启动时，向注册中心订阅自己所需的服务。</li>
+					<li>3. 注册中心返回服务提供者地址列表给消费者，如果有变更，注册中心将基于长连接推送变更数据给消费者。</li>
+					<li>4. 服务消费者，从提供者地址列表中，基于软负载均衡算法，选一台提供者进行调用，如果调用失败，再选另一台调用。</li>
+					<li>5. 服务消费者和提供者，在内存中累计调用次数和调用时间，定时每分钟发送一次统计数据到监控中心。</li>
+				</ul>
+				</div>
+            </div>
+			<div class="step slide" data-x="3900" data-y="0">
+                <div class="title">快速入门</div>
+				<div class="content">
+				<p>见<a href="https://github.com/angilin/dubbo-test">示例代码</a></p>
+				<p>提供方配置文件dubbo-provider-multicast.xml</p>
+				<p>消费方配置文件dubbo-consumer-multicast.xml</p>
+				<p>传输对象SysAccountObj.java</p>
+				<p>接口AccountService.java</p>
+				<p>接口实现类AccountServiceImpl.java</p>
+				<p>提供方启动MulticastProviderStartup.java</p>
+				<p>消费方测试MulticastConsumerTest.java</p>
+            </div>
+			<div class="step slide" data-x="5200" data-y="0">
+                <div class="title">快速入门</div>
+				<div class="content">
+				<p>注意事项</p>
+				<ul>
+					<li>传输对象需要序列化</li>
+					<li>建议把接口和传输对象放在单独项目中，供提供方和消费方公用</li>
+				</ul>
+            </div>
+			<div class="step slide" data-x="3000" data-y="1200">
+                <div class="title">快速入门——zookeeper单机配置</div>
+				<div class="content">
+				<p>下载zookeeper，将conf/zoo_sample.cfg复制并重命名为zoo.cfg</p>
+				<p>单机zoo.cfg的配置如下</p>
+				tickTime=2000                   #单位毫秒。每隔tickTime发送一个心跳，同时2倍的tickTime作为最小session超时时间。<br/>
+				dataDir=/var/lib/zookeeper/data          #需要预先建立该文件夹，保存数据的目录<br/>
+				dataLogDir=/var/lib/zookeeper/log       #需要预先建立该文件夹，保存日志的目录<br/>
+				clientPort=2181               #zookeeper服务器端口号。<br/>
+				<p>使用bin/zkServer.sh启动zookeeper（Windows下用zkService.cmd）</p>
+				</div>
+            </div>
+			<div class="step slide" data-x="4500" data-y="1200">
+                <div class="title">快速入门——zookeeper集群配置</div>
+				<div class="content">
+					<p>配置集群只要在zoo.cfg加上</p>
+					initLimit=5          #单位跳。5跳超时，即10秒超时<br/>
+					syncLimit=2          #单位跳。2跳超时，即4秒超时<br/>
+					server.1=192.168.1.1:2888:3888          #server.1的1表示服务器编号。2555是LF通信端口(LeaderFollower)，3555为选举端口，端口号随便定义。<br/>
+					server.2=192.168.1.2:2888:3888<br/>
+					server.3=192.168.1.3:2888:3888          #至少三台，否则一台宕机后无法选举<br/>
+					<p>在dataDir参数目录下创建文件myid，内容为server.1中的服务器编号1，每台zk保证服务器编号不一样。</p>
+				</div>
+            </div>
+			<div class="step slide" data-x="0" data-y="2500">
+                <div class="title">进阶配置——配置优先级</div>
+				<div class="content">
+					<img src="images/dubbo-config-override.jpg"/>
+					<p>上图中以timeout为例，显示了配置的查找顺序，其它retries, loadbalance, actives等类似</p>
+				</div>
+            </div>
+			<div class="step slide" data-x="1500" data-y="2500">
+                <div class="title">进阶配置——设置接口版本号</div>
+				<div class="content">
+					<p>上线后，当一个接口需要修改，涉及到接口参数变更或传输对象内部字段变更时</p>
+					<p>可以使用多版本配置</p>
+					<p><dubbo:service interface="com.foo.BarService" version="1.0.0" /></p>
+					<p><dubbo:reference id="barService" interface="com.foo.BarService" version="1.0.0" /></p>
+				</div>
+            </div>
+			<div class="step slide" data-x="0" data-y="3700">
+                <div class="title">同类产品</div>
+				<div class="content">
+					<p>dubbox</p>
+					<p>当当网根据自身需求，基于dubbo扩展开发的框架。</p>
+					<p>主要的新功能：</p>
+					<ul>
+					<li>支持REST风格远程调用（HTTP + JSON/XML)。</li>
+					<li>支持基于Kryo和FST的Java高效序列化实现。</li>
+					<li>支持基于嵌入式Tomcat的HTTP remoting体系。</li>
+					<li>升级Spring和Zookeeper客户端版本。</li>
+					</ul>
+				</div>
+            </div>
+            <div class="step slide" data-x="0" data-y="5000">
+                <div class="title">参考资料</div>
+				<div class="content">
+					<p><a href="http://dubbo.io/User+Guide-zh.htm#UserGuide-zh-%E6%B3%A8%E8%A7%A3%E9%85%8D%E7%BD%AE">dubbo用户手册</a></p>
+					<p><a href="http://www.ibm.com/developerworks/cn/webservices/ar-servgov/">SOA治理简介（Service-Oriented Architecture，SOA 面向服务的体系结构）</a></p>
+					<p><a href="http://javatar.iteye.com/blog/1345073">服务治理过程演进</a></p>
+					<p><a href="http://zookeeper.apache.org/doc/trunk/zookeeperStarted.html#sc_RunningReplicatedZooKeeper">zookeeper集群配置</a></p>
+				<a href="https://github.com/dangdangdotcom/dubbox">dubbox说明文件和文档资料</a></p>
+				</div>
+            </div>
+			<div class="step slide" data-x="1500" data-y="5000">
+                <div class="headline">谢谢</div>
+            </div>
+            <!-- 总览 -->
+            <div id="overview" class="step" data-x="0" data-y="0" data-scale="10"></div>
+        </div>
+        <script src="js/impress.js"></script>
+		<script>impress().init();</script>
+    </body>
+</html>
