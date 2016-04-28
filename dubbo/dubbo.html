@@ -15,78 +15,119 @@
 		</div>
 
         <div id="impress">
-            <div class="step slide" data-x="0" data-y="0">
+            <div class="step slide" data-x="-1300" data-y="0">
                 <div class="headline">Dubbo技术分享</div>
             </div>
-            <div class="step slide" data-x="1300" data-y="0">
+			<div class="step slide" data-x="0" data-y="0">
+                <div class="title">目录</div>
+				<div class="content">
+					<ul>
+						<li>Dubbo是什么</li>
+						<li>SOA治理</li>
+						<li>Dubbo原理</li>
+						<li>快速入门</li>
+						<li>进阶配置</li>
+						<li>SOA治理问题回答</li>
+						<li>同类产品</li>
+						<li>参考资料</li>
+					</ul>
+				</div>
+            </div>
+            <div class="step slide" data-x="1500" data-y="0">
                 <div class="title">Dubbo是什么</div>
 				<div class="content">
-				<p>Dubbo是一个，<b>分布式服务框架</b>，致力于提供<b>高性能和透明化的RPC远程服务调用方案</b>，以及<b>SOA服务治理方案</b>。</p>
-				<p>其核心部分包含:</p>
-				<ul>
-				<li>远程通讯: 提供对多种基于长连接的NIO框架抽象封装，包括多种线程模型，序列化，以及“请求-响应”模式的信息交换方式。</li>
-				<li>集群容错: 提供基于接口方法的透明远程过程调用，包括多协议支持，以及软负载均衡，失败容错，地址路由，动态配置等集群支持。</li>
-				<li>自动发现: 基于注册中心目录服务，使服务消费方能动态的查找服务提供方，使地址透明，使服务提供方可以平滑增加或减少机器。<</li>
-				</ul>
+					<p>Dubbo是一个，<b>分布式服务框架</b>，致力于提供<b>高性能和透明化的RPC远程服务调用方案</b>，以及<b>SOA服务治理方案</b>。</p>
+					<p>其核心部分包含:</p>
+					<ul>
+						<li>远程通讯: 提供对多种基于长连接的NIO框架抽象封装，包括多种线程模型，序列化，以及“请求-响应”模式的信息交换方式。</li>
+						<li>集群容错: 提供基于接口方法的透明远程过程调用，包括多协议支持，以及软负载均衡，失败容错，地址路由，动态配置等集群支持。</li>
+						<li>自动发现: 基于注册中心目录服务，使服务消费方能动态的查找服务提供方，使地址透明，使服务提供方可以平滑增加或减少机器。</li>
+					</ul>
 				</div>
             </div>
-			<div class="step slide" data-x="2600" data-y="0">
+			<div class="step slide" data-x="1500" data-y="0" data-z="-2000">
+                <div class="title">SOA治理——提出问题</div>
+				<div class="content">
+					<p>SOA是指面向服务的体系结构（Service-Oriented Architecture，SOA）</p>
+					<ul>
+						<li>什么应该作为服务？在何处设置服务边界？</li>
+						<li>上线后要进行需求修改，需要保证现有客户使用系统的稳定性，不能干扰他们的正常操作，应该怎么处理？</li>
+						<li>服务提供方希望升级接口，但使用方来不及变更时怎么处理？</li>
+						<li>服务提供者如何提供和宣传其服务？服务使用者如何查找其希望调用的服务？</li>
+						<li>如果服务提供者停止工作，你如何知道呢？是否要等到使用这些服务的应用程序停止，使用这些应用程序的人开始抱怨，才会知道服务已停止了呢？</li>
+						<li>是否允许任何人调用任何服务？具有一系列用户的服务是否允许其所有用户访问所有数据？服务使用者和提供者之间交换的数据是否需要进行保护？</li>
+					</ul>
+				</div>
+            </div>
+			<div class="step slide" data-x="3000" data-y="0">
                 <div class="title">Dubbo原理</div>
 				<div class="content">
-				<img src="images/dubbo-architecture.jpg"/>
-				<p><b>调用关系说明：</b></p>
-				<ul>
-					<li>0. 服务容器负责启动，加载，运行服务提供者。</li>
-					<li>1. 服务提供者在启动时，向注册中心注册自己提供的服务。</li>
-					<li>2. 服务消费者在启动时，向注册中心订阅自己所需的服务。</li>
-					<li>3. 注册中心返回服务提供者地址列表给消费者，如果有变更，注册中心将基于长连接推送变更数据给消费者。</li>
-					<li>4. 服务消费者，从提供者地址列表中，基于软负载均衡算法，选一台提供者进行调用，如果调用失败，再选另一台调用。</li>
-					<li>5. 服务消费者和提供者，在内存中累计调用次数和调用时间，定时每分钟发送一次统计数据到监控中心。</li>
-				</ul>
+					<img src="images/dubbo-architecture.jpg"/>
+					<p><b>调用关系说明：</b></p>
+						<p>0. 服务容器负责启动，加载，运行服务提供者。</p>
+						<p>1. 服务提供者在启动时，向注册中心注册自己提供的服务。</p>
+						<p>2. 服务消费者在启动时，向注册中心订阅自己所需的服务。</p>
+						<p>3. 注册中心返回服务提供者地址列表给消费者，如果有变更，注册中心将基于长连接推送变更数据给消费者。</p>
+						<p>4. 服务消费者，从提供者地址列表中，基于软负载均衡算法，选一台提供者进行调用，如果调用失败，再选另一台调用。</p>
+						<p>5. 服务消费者和提供者，在内存中累计调用次数和调用时间，定时每分钟发送一次统计数据到监控中心。</p>
 				</div>
             </div>
-			<div class="step slide" data-x="3900" data-y="0">
+			<div class="step slide" data-x="0" data-y="1200">
                 <div class="title">快速入门</div>
 				<div class="content">
-				<p>见<a href="https://github.com/angilin/dubbo-test">示例代码</a></p>
-				<p>提供方配置文件dubbo-provider-multicast.xml</p>
-				<p>消费方配置文件dubbo-consumer-multicast.xml</p>
-				<p>传输对象SysAccountObj.java</p>
-				<p>接口AccountService.java</p>
-				<p>接口实现类AccountServiceImpl.java</p>
-				<p>提供方启动MulticastProviderStartup.java</p>
-				<p>消费方测试MulticastConsumerTest.java</p>
+					<p>见<a href="https://github.com/angilin/dubbo-test">示例代码</a></p>
+					<p>提供方配置文件dubbo-provider-multicast.xml</p>
+					<p>消费方配置文件dubbo-consumer-multicast.xml</p>
+					<p>传输对象SysAccountObj.java</p>
+					<p>接口AccountService.java</p>
+					<p>接口实现类AccountServiceImpl.java</p>
+					<p>提供方启动MulticastProviderStartup.java</p>
+					<p>消费方测试MulticastConsumerTest.java</p>
+				</div>
             </div>
-			<div class="step slide" data-x="5200" data-y="0">
+			<div class="step slide" data-x="1500" data-y="1200">
                 <div class="title">快速入门</div>
 				<div class="content">
-				<p>注意事项</p>
-				<ul>
-					<li>传输对象需要序列化</li>
-					<li>建议把接口和传输对象放在单独项目中，供提供方和消费方公用</li>
-				</ul>
+					<p>注意事项</p>
+					<ul>
+						<li>传输对象需要序列化。</li>
+						<li>传输对象不能自定义实现List, Map, Number, Date, Calendar等接口，只能用JDK自带的实现。</li>	
+						<li>建议把接口和传输对象放在单独项目中打包，供提供方和消费方公用。</li>
+						<li>建议把注册中心IP和RPC远程服务端口号配置在配置文件中。</li>	
+					</ul>
+				</div>
             </div>
 			<div class="step slide" data-x="3000" data-y="1200">
                 <div class="title">快速入门——zookeeper单机配置</div>
 				<div class="content">
-				<p>下载zookeeper，将conf/zoo_sample.cfg复制并重命名为zoo.cfg</p>
-				<p>单机zoo.cfg的配置如下</p>
-				tickTime=2000                   #单位毫秒。每隔tickTime发送一个心跳，同时2倍的tickTime作为最小session超时时间。<br/>
-				dataDir=/var/lib/zookeeper/data          #需要预先建立该文件夹，保存数据的目录<br/>
-				dataLogDir=/var/lib/zookeeper/log       #需要预先建立该文件夹，保存日志的目录<br/>
-				clientPort=2181               #zookeeper服务器端口号。<br/>
-				<p>使用bin/zkServer.sh启动zookeeper（Windows下用zkService.cmd）</p>
+					<p>下载zookeeper，将conf/zoo_sample.cfg复制并重命名为zoo.cfg</p>
+					<p>单机zoo.cfg的配置如下</p>
+						<p class="code">#单位毫秒。每隔tickTime发送一个心跳。</p>
+						<p class="code">#同时2倍的tickTime作为最小session超时时间。</p>
+						<p class="code">tickTime=2000</p>
+						<p class="code">#需要预先建立该文件夹，保存数据的目录</p>
+						<p class="code">dataDir=/var/lib/zookeeper/data</p>
+						<p class="code">#需要预先建立该文件夹，保存日志的目录</p>
+						<p class="code">dataLogDir=/var/lib/zookeeper/log </p>
+						<p class="code">#zookeeper服务器端口号。</p>
+						<p class="code">clientPort=2181</p>
+					<p>使用bin/zkServer.sh启动zookeeper（Windows下用zkService.cmd）</p>
 				</div>
             </div>
 			<div class="step slide" data-x="4500" data-y="1200">
                 <div class="title">快速入门——zookeeper集群配置</div>
 				<div class="content">
 					<p>配置集群只要在zoo.cfg加上</p>
-					initLimit=5          #单位跳。5跳超时，即10秒超时<br/>
-					syncLimit=2          #单位跳。2跳超时，即4秒超时<br/>
-					server.1=192.168.1.1:2888:3888          #server.1的1表示服务器编号。2555是LF通信端口(LeaderFollower)，3555为选举端口，端口号随便定义。<br/>
-					server.2=192.168.1.2:2888:3888<br/>
-					server.3=192.168.1.3:2888:3888          #至少三台，否则一台宕机后无法选举<br/>
+					<p class="code">#单位跳。5跳超时，即10秒超时</p>
+					<p class="code">initLimit=5          </p>
+					<p class="code">#单位跳。2跳超时，即4秒超时</p>
+					<p class="code">syncLimit=2</p>
+					<p class="code">#server.1的1表示服务器编号。</p>
+					<p class="code">#2555是LF通信端口(LeaderFollower)，3555为选举端口，端口号随便定义。</p>
+					<p class="code">server.1=192.168.1.1:2888:3888</p>
+					<p class="code">server.2=192.168.1.2:2888:3888</p>
+					<p class="code">server.3=192.168.1.3:2888:3888</p>
+					<p>zookeeper服务器至少三台，否则一台宕机后无法选举</p>
 					<p>在dataDir参数目录下创建文件myid，内容为server.1中的服务器编号1，每台zk保证服务器编号不一样。</p>
 				</div>
             </div>
@@ -94,7 +135,7 @@
                 <div class="title">进阶配置——配置优先级</div>
 				<div class="content">
 					<img src="images/dubbo-config-override.jpg"/>
-					<p>上图中以timeout为例，显示了配置的查找顺序，其它retries, loadbalance, actives等类似</p>
+					<p>以timeout为例，配置的查找顺序</p>
 				</div>
             </div>
 			<div class="step slide" data-x="1500" data-y="2500">
@@ -102,8 +143,67 @@
 				<div class="content">
 					<p>上线后，当一个接口需要修改，涉及到接口参数变更或传输对象内部字段变更时</p>
 					<p>可以使用多版本配置</p>
-					<p><dubbo:service interface="com.foo.BarService" version="1.0.0" /></p>
-					<p><dubbo:reference id="barService" interface="com.foo.BarService" version="1.0.0" /></p>
+					<p>&lt;dubbo:service interface="com.foo.BarService" version="1.0.0" /&gt; </p>
+					<p>&lt;dubbo:reference id="barService" interface="com.foo.BarService" version="1.0.0" /&gt;  </p>
+					<p>版本号不同的服务互不引用</p>
+					<p>group，interface，version是服务的匹配条件，三者决定是不是同一个服务</p>
+				</div>
+            </div>
+			<div class="step slide" data-x="3000" data-y="2500">
+                <div class="title">进阶配置——dubbo协议</div>
+				<div class="content">
+					<p>Dubbo是缺省协议，采用单一长连接和NIO异步通讯，适合于小数据量大并发的服务调用，以及服务消费者机器数远大于服务提供者机器数的情况。</p>
+					<p>Dubbo协议不适合传送大数据量的服务，比如传文件，传视频等，除非请求量很低。</p>
+					<p>Dubbo协议缺省每服务每提供者每消费者使用单一长连接，如果数据量较大，可以使用多个连接。</p>
+					<p>为防止被大量连接撑挂，可在服务提供方限制连接数，以实现服务提供方自我保护。</p>
+				</div>
+            </div>
+			<div class="step slide" data-x="4500" data-y="2500">
+                <div class="title">进阶配置——hessian协议</div>
+				<div class="content">
+					<p>Hessian协议用于集成Hessian的服务，Hessian底层采用Http通讯，采用Servlet暴露服务，Dubbo缺省内嵌Jetty作为服务器实现。</p>
+					<p>适用于传入传出参数数据包较大，提供者比消费者个数多，提供者压力较大，可传文件。</p>
+					<p>见<a href="https://github.com/angilin/dubbo-test">示例代码</a></p>
+					<p>需要引入hessian包、servlet-api包、jetty包和jetty-threadpool包。</p>
+					<p>HessianProviderStartup.java和HessianConsumerTest.java</p>
+				</div>
+            </div>
+			<div class="step slide" data-x="6000" data-y="2500">
+                <div class="title">进阶配置——其它</div>
+				<div class="content">
+					<p>其它协议：http，thrift，webservice，rmi</p>
+					<p>监控中心</p>
+					<p>泛化引用：框架集成GenericService</p>
+					<p>令牌验证：在注册中心实现权限控制</p>
+					<p>上下文和异步调用：RpcContext和Future</p>
+					<p>本地存根和本地伪装：容错性和异常封装</p>
+				</div>
+            </div>
+			<div class="step slide" data-x="0" data-y="3700" data-z="-2000">
+                <div class="title">SOA治理——回答问题</div>
+				<div class="content">
+					<ul>
+						<li>什么应该作为服务？在何处设置服务边界？<p>服务的边界应当封装一项可重用、不受上下文约束的功能。接口应该公开服务进行的工作，但要隐藏服务是如何实现的，并允许更改实现或采用替代实现。服务通常在自己的事务中运行，确保其工作要么完全完成，要么完全回滚。<p></li>
+						<li>上线后要进行需求修改，需要保证现有客户使用系统的稳定性，不能干扰他们的正常操作，应该怎么处理？
+						<p>当前服务接口和行为将保留为一个版本，而同时会将较新的服务作为另一个版本引入。如果需要不停机发布，先发布部分新版本服务接口，再发布使用方应用，最后发布剩余的新版本服务接口。</p>
+						</li>
+						<li>服务提供方希望升级接口，但使用方来不及变更时怎么处理？
+						<p>采用多版本配置。为了避免出现过多的版本，每个服务版本需要有计划的制定弃用和退役计划。</p></li>
+					</ul>
+				</div>
+            </div>
+			<div class="step slide" data-x="1500" data-y="3700" data-z="-2000">
+                <div class="title">SOA治理——回答问题</div>
+				<div class="content">
+					<ul>
+						<li>服务提供者如何提供和宣传其服务？服务使用者如何查找其希望调用的服务？
+						<p>使用服务注册中心担当可用服务清单的角色，并提供调用服务的地址。</p></li>
+						<li>如果服务提供者停止工作，你如何知道呢？是否要等到使用这些服务的应用程序停止，使用这些应用程序的人开始抱怨，才会知道服务已停止了呢？
+						<p>使用监控中心检测负载不均衡和停机状况。根据历史数据，帮助预测使用率会变得更高的服务，为其提供更好的配置。服务提供者和使用者，就提供者必须进行怎样的工作，以及使用者可以期望得到什么服务达成一致的协定，形成服务提供者愿意提供且服务使用者愿意接受的可度量目标。</p>
+						</li>
+						<li>是否允许任何人调用任何服务？具有一系列用户的服务是否允许其所有用户访问所有数据？服务使用者和提供者之间交换的数据是否需要进行保护？
+						<p>服务需要限制只能被授权的用户使用，且需要对传输数据进行保护，以防止被窃听。针对使用者的需要实现最低级别的保护和最大功能。</p></li>
+					</ul>
 				</div>
             </div>
 			<div class="step slide" data-x="0" data-y="3700">
@@ -113,10 +213,10 @@
 					<p>当当网根据自身需求，基于dubbo扩展开发的框架。</p>
 					<p>主要的新功能：</p>
 					<ul>
-					<li>支持REST风格远程调用（HTTP + JSON/XML)。</li>
-					<li>支持基于Kryo和FST的Java高效序列化实现。</li>
-					<li>支持基于嵌入式Tomcat的HTTP remoting体系。</li>
-					<li>升级Spring和Zookeeper客户端版本。</li>
+						<li>支持REST风格远程调用（HTTP + JSON/XML)。</li>
+						<li>支持基于Kryo和FST的Java高效序列化实现。</li>
+						<li>支持基于嵌入式Tomcat的HTTP remoting体系。</li>
+						<li>升级Spring和Zookeeper客户端版本。</li>
 					</ul>
 				</div>
             </div>
@@ -127,14 +227,14 @@
 					<p><a href="http://www.ibm.com/developerworks/cn/webservices/ar-servgov/">SOA治理简介（Service-Oriented Architecture，SOA 面向服务的体系结构）</a></p>
 					<p><a href="http://javatar.iteye.com/blog/1345073">服务治理过程演进</a></p>
 					<p><a href="http://zookeeper.apache.org/doc/trunk/zookeeperStarted.html#sc_RunningReplicatedZooKeeper">zookeeper集群配置</a></p>
-				<a href="https://github.com/dangdangdotcom/dubbox">dubbox说明文件和文档资料</a></p>
+					<a href="https://github.com/dangdangdotcom/dubbox">dubbox说明文件和文档资料</a></p>
 				</div>
             </div>
 			<div class="step slide" data-x="1500" data-y="5000">
                 <div class="headline">谢谢</div>
             </div>
             <!-- 总览 -->
-            <div id="overview" class="step" data-x="0" data-y="0" data-scale="10"></div>
+            <div id="overview" class="step" data-x="1500" data-y="2500" data-scale="8"></div>
         </div>
         <script src="js/impress.js"></script>
 		<script>impress().init();</script>
